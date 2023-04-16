@@ -139,19 +139,20 @@ table {
   --color-theme: #0ed7da;
   --color-grey: #f0f0f0;
   --color-white-grey: #f9f9f9;
+  --color-white: #ffffff;
 }
 
 /* RWD */
 @media screen and (min-width: 768px){
-  html {
-    font-size: var(--fs-basic);
-  }
+  /* html {
+    font-size: var(--fs-h2);
+  } */
 }
 
 @media screen and (min-width: 1024px){
-  html {
-    font-size: var(--fs-h3);
-  }
+  /* html {
+    font-size: var(--fs-h1);
+  } */
 }
 
 `;

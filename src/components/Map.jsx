@@ -6,7 +6,7 @@ const mapContainerStyle = {
   height: '100vh',
 };
 
-const Map = () => {
+const Map = ({ setCoords, setBonds, coords }) => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -41,6 +41,9 @@ const Map = () => {
       zoom={14}
       options={options}
       onLoad={onLoad}
+      onChange={(e) => {
+        console.log('e', e);
+      }}
     >
       {/* Child components, such as markers, info windows, etc. */}
       <></>

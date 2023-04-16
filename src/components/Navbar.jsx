@@ -1,10 +1,11 @@
+
 import SearchInput from './SearchInput';
 
 const Navbar = () => {
   return (
-    <div>
+    <>
       <SearchInput />
-    </div>
+    </>
   );
 };
 

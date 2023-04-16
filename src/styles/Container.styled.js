@@ -17,17 +17,22 @@ export const GlobalContainer = styled.div`
   grid-template-rows: 1fr 9fr;
 
   @media screen and (${device.lg}) {
-    grid-template-columns: 2fr 8fr;
+    grid-template-columns: 2.5fr 5.5fr;
   }
 `;
 
 export const NavbarWrapper = styled.div`
-  @media screen and (${device.lg}) {
+  display: flex;
+  align-items: center;
+  margin: 0px auto;
+  width: 100%;
+  background-color: var(--color-grey);
+  /* @media screen and (${device.lg}) {
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 3;
-  }
+  } */
 `;
 
 export const MapWrapper = styled.div`

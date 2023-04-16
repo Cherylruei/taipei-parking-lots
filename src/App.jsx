@@ -9,6 +9,7 @@ import { getPlacesData } from 'api';
 function App() {
   // 使用者座標資料
   const [coords, setCoords] = useState({});
+  const [bounds, setBounds] = useState(null);
   // 抓取停車場資料 (all+available)
   const [parkingLotsData, setParkingLostsData] = useState([]);
   // 搜尋出的停車場資料
@@ -44,7 +45,7 @@ function App() {
         <Navbar />
       </NavbarWrapper>
       <MapWrapper>
-        <Map />
+        <Map setCoords={setCoords} setBounds={setBounds} coords={coords} />
       </MapWrapper>
     </GlobalContainer>
   );

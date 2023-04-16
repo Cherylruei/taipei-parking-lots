@@ -1,11 +1,12 @@
 import { IconSearch } from 'assets/icons';
+import { StyledSearch } from 'styles/Navbar.style';
 
 const SearchInput = () => {
   return (
-    <div>
-      <i class='fa-solid fa-magnifying-glass'></i>
+    <StyledSearch>
+      <IconSearch className='icon' />
       <input type='search' id='gsearch' name='gsearch' />
-    </div>
+    </StyledSearch>
   );
 };
 
