@@ -30,7 +30,7 @@ function App() {
     try {
       const data = await getPlacesData();
       if (data) {
-        console.log('useEffect_data', data);
+        // console.log('useEffect_data', data);
         const updatedTime = data.UPDATETIME;
         const parkingLots = data.park;
       }
@@ -48,7 +48,7 @@ function App() {
     <GlobalContainer>
       <GlobalStyle />
       <NavbarWrapper>
-        <Navbar />
+        <Navbar setCoords={setCoords} />
       </NavbarWrapper>
       <MapWrapper>
         <Map setCoords={setCoords} setBounds={setBounds} coords={coords} />

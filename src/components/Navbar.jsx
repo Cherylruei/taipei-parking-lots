@@ -1,10 +1,9 @@
-
 import SearchInput from './SearchInput';
 
-const Navbar = () => {
+const Navbar = ({ loader, setCoords }) => {
   return (
     <>
-      <SearchInput />
+      <SearchInput loader={loader} setCoords={setCoords} />
     </>
   );
 };
