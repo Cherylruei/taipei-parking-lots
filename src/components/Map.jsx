@@ -1,5 +1,5 @@
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 const mapContainerStyle = {
   width: '100%',
@@ -13,14 +13,6 @@ const Map = ({ setCoords, setBonds, coords }) => {
   });
 
   const mapRef = useRef();
-  // 台北市的經緯度:預設位置, 使用useMemo hook (dependencies [])只會渲染一次
-  const center = useMemo(
-    () => ({
-      lat: 25.033671,
-      lng: 121.564427,
-    }),
-    []
-  );
 
   const options = useMemo(
     () => ({
@@ -30,19 +22,43 @@ const Map = ({ setCoords, setBonds, coords }) => {
     []
   );
 
+  // 獲取使用者當前位置
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log('position', position);
+      setCoords({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    });
+  }, []);
+
   // 用 useRef 和 useCallback 去儲存 GoogleMap的實例
   const onLoad = useCallback((map) => (mapRef.current = map), []);
-
   if (!isLoaded) return <div>Loading...</div>;
   return (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      center={center}
+      center={coords}
       zoom={14}
       options={options}
       onLoad={onLoad}
-      onChange={(e) => {
-        console.log('e', e);
+      // 一拖動地圖，center 就會跟著改變 (使用者在移動時，center跟著改變是一樣的用法?)
+      onCenterChanged={() => {
+        // if (mapRef.current) {
+        //   const center = mapRef.current.getCenter();
+        //   const distance =
+        //     window.google.maps.geometry.spherical.computeDistanceBetween(
+        //       new window.google.maps.LatLng(userPosition),
+        //       center
+        //     );
+        //   if (distance > 1000) {
+        //     setCoords({
+        //       lat: center.lat(),
+        //       lng: center.lng(),
+        //     });
+        //   }
+        // }
       }}
     >
       {/* Child components, such as markers, info windows, etc. */}

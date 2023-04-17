@@ -9,7 +9,6 @@ const lotsAvailableURL =
 export const getPlacesData = async () => {
   try {
     const res = await axios.get(lotsDescURL);
-    console.log('res.data', res.data.data);
     return res.data.data;
   } catch (error) {
     console.log(error);

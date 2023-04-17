@@ -1,14 +1,22 @@
 import Map from 'components/Map';
 import Navbar from 'components/Navbar';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { GlobalStyle } from 'components/globalStyle';
 import { GlobalContainer } from 'styles/Container.styled';
 import { MapWrapper, NavbarWrapper } from './styles/Container.styled';
 import { getPlacesData } from 'api';
 
 function App() {
+  // 台北市的經緯度:預設位置, 使用useMemo hook (dependencies [])只會渲染一次
+  const defaultCenter = useMemo(
+    () => ({
+      lat: 25.033671,
+      lng: 121.564427,
+    }),
+    []
+  );
   // 使用者座標資料
-  const [coords, setCoords] = useState({});
+  const [coords, setCoords] = useState(defaultCenter);
   const [bounds, setBounds] = useState(null);
   // 抓取停車場資料 (all+available)
   const [parkingLotsData, setParkingLostsData] = useState([]);
@@ -25,8 +33,6 @@ function App() {
         console.log('useEffect_data', data);
         const updatedTime = data.UPDATETIME;
         const parkingLots = data.park;
-        console.log('updatedTime', updatedTime);
-        console.log('parkingLots', parkingLots);
       }
     } catch (error) {
       console.log(error);
