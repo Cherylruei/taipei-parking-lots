@@ -19,7 +19,7 @@ function App() {
   const [coords, setCoords] = useState(defaultCenter);
   const [bounds, setBounds] = useState(null);
   // 抓取停車場資料 (all+available)
-  const [parkingLotsData, setParkingLostsData] = useState([]);
+  const [parkingLots, setParkingLots] = useState([]);
   // 搜尋出的停車場資料
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   // 地圖上被使用者點擊的地標，資料需要顯示在Header
@@ -32,7 +32,7 @@ function App() {
       if (data) {
         // console.log('useEffect_data', data);
         const updatedTime = data.UPDATETIME;
-        const parkingLots = data.park;
+        setParkingLots(data.park);
       }
     } catch (error) {
       console.log(error);
@@ -51,7 +51,13 @@ function App() {
         <Navbar setCoords={setCoords} />
       </NavbarWrapper>
       <MapWrapper>
-        <Map setCoords={setCoords} setBounds={setBounds} coords={coords} />
+        <Map
+          setCoords={setCoords}
+          setBounds={setBounds}
+          coords={coords}
+          parkingLots={parkingLots}
+          setParkingLots={setParkingLots}
+        />
       </MapWrapper>
     </GlobalContainer>
   );
