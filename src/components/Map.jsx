@@ -46,14 +46,20 @@ const Map = ({
   };
 
   const handleUserLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setCoords({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-    });
-    setCurrentPosition(coords);
-    setShowPosition(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        setCoords(userPosition);
+        setCurrentPosition(coords);
+        setShowPosition(true);
+      },
+      () => {
+        alert('請允許存取使用者位置來使用此功能');
+      }
+    );
   };
 
   return (
