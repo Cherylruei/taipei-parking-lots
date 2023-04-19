@@ -1,5 +1,5 @@
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 import { IconLocation } from 'assets/icons';
 
@@ -21,18 +21,20 @@ const mapContainerStyle = {
 const Map = ({
   onLoad,
   setCoords,
+  setBounds,
   coords,
   parkingLots,
   setParkingLots,
   onBoundsChanged,
 }) => {
   // 使用者現在的位置和地圖的中心不一定是同一個，因為還要能拖曳地圖去看使用者位置以外的停車場
+  const mapRef = useRef(null);
   const [currentPosition, setCurrentPosition] = useState(coords);
   const [showPosition, setShowPosition] = useState(false);
 
   const options = useMemo(
     () => ({
-      disableDefaultUI: true,
+      disableDefaultUI: false,
       zoomControl: true,
     }),
     []
@@ -45,6 +47,15 @@ const Map = ({
     anchor: new window.google.maps.Point(15, 15),
   };
 
+  // const handleBoundsChanged = useCallback(() => {
+  //   const map = mapRef.current;
+  //   if (map) {
+  //     const bounds = map.getBounds();
+  //     console.log("bounds", bounds)
+  //     onBoundsChanged(bounds);
+  //   }
+  // });
+
   const handleUserLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -55,6 +66,25 @@ const Map = ({
         setCoords(userPosition);
         setCurrentPosition(coords);
         setShowPosition(true);
+
+        const radius = 0.001; // 使用者使用定位中心上下左右個擴展 0.001 (經緯度) 經度約280公尺
+        const map = mapRef.current;
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        const northEast = new window.google.maps.LatLng(
+          userLat + radius,
+          userLng + radius
+        );
+        const southWest = new window.google.maps.LatLng(
+          userLat - radius,
+          userLng - radius
+        );
+        const bounds = new window.google.maps.LatLngBounds(
+          southWest,
+          northEast
+        );
+        console.log('bounds', bounds);
+        map.fitBounds(bounds);
       },
       () => {
         alert('請允許存取使用者位置來使用此功能');
@@ -65,12 +95,17 @@ const Map = ({
   return (
     <>
       <GoogleMap
+        id='map'
+        ref={mapRef}
         mapContainerStyle={mapContainerStyle}
         center={coords}
-        zoom={14}
+        zoom={16}
         options={options}
-        onLoad={onLoad}
-        onBoundsChanged={onBoundsChanged}
+        onLoad={(map) => {
+          mapRef.current = map;
+          onLoad(map);
+        }}
+        // onBoundsChanged={handleBoundsChanged}
         // 一拖動地圖，center 就會跟著改變 (使用者在移動時，center跟著改變是一樣的用法?)
       >
         {showPosition && <MarkerF position={currentPosition} icon={icon} />}
