@@ -1,7 +1,13 @@
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { GoogleMap, InfoWindow, MarkerF } from '@react-google-maps/api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 import { IconLocation } from 'assets/icons';
+
+// 轉TWD和經緯度的function
+function transferLatLng(x, y) {
+  const { lat, lng } = twd97tolatlng(x, y);
+  return { lat, lng };
+}
 
 const LocationBtn = ({ handleUserLocation }) => {
   return (
@@ -21,7 +27,8 @@ const mapContainerStyle = {
 const Map = ({
   onLoad,
   setCoords,
-  setBounds,
+  selected,
+  setSelected,
   coords,
   parkingLots,
   setParkingLots,
@@ -92,11 +99,16 @@ const Map = ({
     );
   };
 
+  const handleCloseInfo = () => {
+    if (selected !== null) {
+      setSelected(null);
+    }
+  };
+
   return (
     <>
       <GoogleMap
         id='map'
-        ref={mapRef}
         mapContainerStyle={mapContainerStyle}
         center={coords}
         zoom={16}
@@ -109,16 +121,31 @@ const Map = ({
         // 一拖動地圖，center 就會跟著改變 (使用者在移動時，center跟著改變是一樣的用法?)
       >
         {showPosition && <MarkerF position={currentPosition} icon={icon} />}
-        {/* {console.log('parkingLots', parkingLots)} */}
         {parkingLots &&
           parkingLots.map((parkingLot) => {
-            const { lat, lng } = twd97tolatlng(
-              parkingLot.tw97x,
-              parkingLot.tw97y
+            return (
+              <MarkerF
+                key={parkingLot.id}
+                position={transferLatLng(parkingLot.tw97x, parkingLot.tw97y)}
+                onClick={() => {
+                  setSelected(parkingLot);
+                }}
+              />
             );
-            // console.log('parkinglot', parkingLot);
-            return <MarkerF key={parkingLot.id} position={{ lat, lng }} />;
           })}
+        {selected ? (
+          <InfoWindow
+            position={transferLatLng(selected.tw97x, selected.tw97y)}
+            onCloseClick={handleCloseInfo}
+            visible={selected !== null}
+          >
+            <div>
+              <h2>{selected.name}</h2>
+              <p>總停車位:{selected.totalcar}</p>
+            </div>
+          </InfoWindow>
+        ) : null}
+        {console.log('selected2', selected)}
         {/* Child components, such as markers, info windows, etc. */}
         <LocationBtn handleUserLocation={handleUserLocation} />
       </GoogleMap>

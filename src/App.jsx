@@ -42,7 +42,7 @@ function App() {
   // 有空位的停車場資料
   const [availablePlaces, setAvailablePlaces] = useState([]);
   // 地圖上被使用者點擊的地標，資料需要顯示在Header
-  const [childClicked, setChildClicked] = useState([]);
+  const [selected, setSelected] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // 用 useRef 和 useCallback 去儲存 GoogleMap的實例
@@ -90,7 +90,8 @@ function App() {
         <Map
           onLoad={onLoad}
           setCoords={setCoords}
-          setBounds={setBounds}
+          selected={selected}
+          setSelected={setSelected}
           coords={coords}
           parkingLots={parkingLots}
           setParkingLots={setParkingLots}
