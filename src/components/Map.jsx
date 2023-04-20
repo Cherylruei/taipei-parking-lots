@@ -31,13 +31,18 @@ const Map = ({
   setSelected,
   coords,
   parkingLots,
-  setParkingLots,
+  visibleLots,
+  setVisibleLots,
   onBoundsChanged,
 }) => {
   // 使用者現在的位置和地圖的中心不一定是同一個，因為還要能拖曳地圖去看使用者位置以外的停車場
   const mapRef = useRef(null);
   const [currentPosition, setCurrentPosition] = useState(coords);
   const [showPosition, setShowPosition] = useState(false);
+  // map 是 google maps 的物件，設置 state的變數去追蹤他的變化
+  const [map, setMap] = useState(null);
+  // 當地圖停止拖曳時為 true
+  const [isMapIdle, setIsMapIdle] = useState(false);
 
   const options = useMemo(
     () => ({
@@ -54,14 +59,36 @@ const Map = ({
     anchor: new window.google.maps.Point(15, 15),
   };
 
-  // const handleBoundsChanged = useCallback(() => {
-  //   const map = mapRef.current;
-  //   if (map) {
-  //     const bounds = map.getBounds();
-  //     console.log("bounds", bounds)
-  //     onBoundsChanged(bounds);
-  //   }
-  // });
+  const handleLoad = useCallback((map) => {
+    mapRef.current = map;
+    setMap(map);
+    onLoad(map);
+    map.setZoom(16);
+    map.setCenter(coords);
+  }, []);
+
+  useEffect(() => {
+    if (map) {
+      const listener = map.addListener('idle', () => {
+        setIsMapIdle(true);
+      });
+      return () => {
+        window.google.maps.event.removeListener(listener);
+      };
+    }
+  }, [map]);
+
+  useEffect(() => {
+    if (isMapIdle) {
+      const bounds = map.getBounds();
+      const visibleLots = parkingLots.filter((parkingLot) => {
+        const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
+        return bounds.contains(new window.google.maps.LatLng(lat, lng));
+      });
+      setVisibleLots(visibleLots);
+      setIsMapIdle(false);
+    }
+  }, [map, isMapIdle, visibleLots, setVisibleLots, parkingLots]);
 
   const handleUserLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -90,8 +117,17 @@ const Map = ({
           southWest,
           northEast
         );
-        console.log('bounds', bounds);
         map.fitBounds(bounds);
+
+        const visibleLots = parkingLots.filter((parkingLot) => {
+          const { lat, lng } = transferLatLng(
+            parkingLot.tw97x,
+            parkingLot.tw97y
+          );
+          // return true for the parking lots in bounds
+          return bounds.contains(new window.google.maps.LatLng(lat, lng));
+        });
+        setVisibleLots(visibleLots);
       },
       () => {
         alert('請允許存取使用者位置來使用此功能');
@@ -110,19 +146,12 @@ const Map = ({
       <GoogleMap
         id='map'
         mapContainerStyle={mapContainerStyle}
-        center={coords}
-        zoom={16}
         options={options}
-        onLoad={(map) => {
-          mapRef.current = map;
-          onLoad(map);
-        }}
-        // onBoundsChanged={handleBoundsChanged}
-        // 一拖動地圖，center 就會跟著改變 (使用者在移動時，center跟著改變是一樣的用法?)
+        onLoad={handleLoad}
       >
         {showPosition && <MarkerF position={currentPosition} icon={icon} />}
-        {parkingLots &&
-          parkingLots.map((parkingLot) => {
+        {visibleLots &&
+          visibleLots.map((parkingLot) => {
             return (
               <MarkerF
                 key={parkingLot.id}
