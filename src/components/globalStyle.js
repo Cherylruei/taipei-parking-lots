@@ -142,17 +142,17 @@ table {
   --color-white: #ffffff;
 }
 
+html,body {
+  min-height: 100%;
+  scroll-behavior: smooth
+}
+
 /* RWD */
 @media screen and (min-width: 768px){
-  /* html {
-    font-size: var(--fs-h2);
-  } */
 }
 
 @media screen and (min-width: 1024px){
-  /* html {
-    font-size: var(--fs-h1);
-  } */
+
 }
 
 `;

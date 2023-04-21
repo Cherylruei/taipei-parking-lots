@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { GlobalStyle } from 'components/globalStyle';
 import { GlobalContainer } from 'styles/Container.styled';
 import { MapWrapper, NavbarWrapper } from './styles/Container.styled';
-import { getPlacesData } from 'api';
+import { getAvailableLots, getPlacesData } from 'api';
 
 function App() {
   // 台北市的經緯度:預設位置, 使用useMemo hook (dependencies [])只會渲染一次
@@ -37,13 +37,23 @@ function App() {
     // 初始化時獲取附近停車場
     // getParkingLots(map.getCenter());
   }, []);
-
+ 
+  // 之後再解決 useEffect API 會呼叫兩次
   const getParkingLots = async (location) => {
     try {
-      const data = await getPlacesData(location);
-      if (data) {
+      const lotsInfo = await getPlacesData(location);
+      const availableLots = await getAvailableLots(location);
+      if (lotsInfo && availableLots) {
         // const updatedTime = data.UPDATETIME;
-        setParkingLots(data.park);
+        // 將陣列轉換為 Set 物件(set裡的元素有不可重複性)，使用has()用法快速判斷availableId是否包含此parkingLot的id
+        const availableIds = new Set(availableLots.park.map((lot) => lot.id));
+        // 將資料裡總停車位= 0 的資訊刪除
+        const parkingLots = lotsInfo.park.filter((parkingLot) => {
+          return parkingLot.totalcar > 0 && availableIds.has(parkingLot.id);
+        });
+        // 如果 parkingLot的 id 沒有在 availableCars 資料裡也刪除
+        setParkingLots(parkingLots);
+        setAvailablePlaces(availableLots.park);
       }
     } catch (error) {
       console.log(error);
@@ -54,12 +64,17 @@ function App() {
     setIsLoading(true);
     getParkingLots();
   }, []);
-
+  console.log('visiablePark', visibleLots);
+  console.log('availablePlaces', availablePlaces);
   return (
     <GlobalContainer>
       <GlobalStyle />
       <NavbarWrapper>
-        <Navbar setCoords={setCoords} />
+        <Navbar
+          setCoords={setCoords}
+          visibleLots={visibleLots}
+          availablePlaces={availablePlaces}
+        />
       </NavbarWrapper>
       <MapWrapper>
         <Map

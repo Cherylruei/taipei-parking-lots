@@ -14,3 +14,12 @@ export const getPlacesData = async () => {
     console.log(error);
   }
 };
+
+export const getAvailableLots = async () => {
+  try {
+    const res = await axios.get(lotsAvailableURL);
+    return res.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

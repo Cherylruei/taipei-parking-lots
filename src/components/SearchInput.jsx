@@ -16,19 +16,17 @@ const SearchInput = ({ setCoords }) => {
   };
 
   return (
-    <>
-      <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
-        <StyledSearch>
-          <IconSearch className='icon' />
-          <input
-            type='search'
-            id='gsearch'
-            name='gsearch'
-            placeholder='尋找停車場...'
-          />
-        </StyledSearch>
-      </Autocomplete>
-    </>
+    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+      <StyledSearch>
+        <IconSearch className='icon' />
+        <input
+          type='search'
+          id='gsearch'
+          name='gsearch'
+          placeholder='尋找停車場...'
+        />
+      </StyledSearch>
+    </Autocomplete>
   );
 };
 
