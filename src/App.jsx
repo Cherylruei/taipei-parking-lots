@@ -37,8 +37,8 @@ function App() {
     // 初始化時獲取附近停車場
     // getParkingLots(map.getCenter());
   }, []);
- 
-  // 之後再解決 useEffect API 會呼叫兩次
+
+  // 之後再解決 useEffect
   const getParkingLots = async (location) => {
     try {
       const lotsInfo = await getPlacesData(location);
