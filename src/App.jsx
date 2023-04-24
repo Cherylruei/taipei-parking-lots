@@ -20,7 +20,6 @@ function App() {
 
   // 使用者座標資料
   const [coords, setCoords] = useState(defaultCenter);
-  const [bounds, setBounds] = useState(null);
   // 拿到的所有停車場資料
   const [parkingLots, setParkingLots] = useState([]);
   // 篩選出的停車場資料 (附近/搜尋)

@@ -29,9 +29,12 @@ export const NavbarWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   max-width: 100%;
-  height: 100vh;
+  max-height: 30vh;
   margin: 0px;
   background-color: var(--color-grey);
+  @media screen and (${device.lg}) {
+    max-height: 100vh;
+  }
 `;
 
 export const MapWrapper = styled.div`

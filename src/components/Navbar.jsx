@@ -1,6 +1,6 @@
 import SearchInput from './SearchInput';
 import styled from 'styled-components';
-import { useState, useEffect, createRef, useRef } from 'react';
+import { useState, useEffect, createRef } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 
 // 轉TWD和經緯度的function
@@ -9,7 +9,7 @@ function transferLatLng(x, y) {
   return { lat, lng };
 }
 
-const StyledList = styled.div`
+const StyledList = styled.ul`
   overflow-y: scroll;
   div {
     margin: 16px 16px;
@@ -45,7 +45,7 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
       setTimeout(() => {
         elRefs[index].current.scrollIntoView({
           behavior: 'smooth',
-          block: 'start',
+          block: 'nearest',
         });
       }, 0);
     }

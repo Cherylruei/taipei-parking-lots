@@ -175,7 +175,7 @@ const Map = ({
               <p>總停車位:{selected.totalcar}</p>
               {availablePlaces?.map((place) => {
                 if (place.id === selected.id) {
-                  return <p>剩餘空位:{place.availablecar}</p>;
+                  return <p key={place.id}>剩餘空位:{place.availablecar}</p>;
                 }
               })}
             </div>
