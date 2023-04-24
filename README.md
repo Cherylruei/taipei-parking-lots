@@ -18,7 +18,6 @@ This project is supported for both mobile and desktop devices and it works with 
 - node.js @16.18.1
 - axios @1.3.4
 - @react-google-maps/api @2.18.1
-- clsx @1.2.1
 - react @18.2.0
 - react-dme @18.2.0
 - styled-components @5.3.9
