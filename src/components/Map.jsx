@@ -33,7 +33,7 @@ const Map = ({
   parkingLots,
   visibleLots,
   setVisibleLots,
-  onBoundsChanged,
+  availablePlaces,
 }) => {
   // 使用者現在的位置和地圖的中心不一定是同一個，因為還要能拖曳地圖去看使用者位置以外的停車場
   const mapRef = useRef(null);
@@ -141,6 +141,8 @@ const Map = ({
     }
   };
 
+  console.log({ selected });
+
   return (
     <>
       <GoogleMap
@@ -151,7 +153,7 @@ const Map = ({
       >
         {showPosition && <MarkerF position={currentPosition} icon={icon} />}
         {visibleLots &&
-          visibleLots.map((parkingLot) => {
+          visibleLots?.map((parkingLot) => {
             return (
               <MarkerF
                 key={parkingLot.id}
@@ -171,10 +173,15 @@ const Map = ({
             <div>
               <h2>{selected.name}</h2>
               <p>總停車位:{selected.totalcar}</p>
+              {availablePlaces?.map((place) => {
+                if (place.id === selected.id) {
+                  return <p>剩餘空位:{place.availablecar}</p>;
+                }
+              })}
             </div>
           </InfoWindow>
         ) : null}
-        {console.log('selected2', selected)}
+        {/* {console.log('selected2', selected)} */}
         {/* Child components, such as markers, info windows, etc. */}
         <LocationBtn handleUserLocation={handleUserLocation} />
       </GoogleMap>

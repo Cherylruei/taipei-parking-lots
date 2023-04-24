@@ -64,15 +64,16 @@ function App() {
     setIsLoading(true);
     getParkingLots();
   }, []);
-  console.log('visiablePark', visibleLots);
-  console.log('availablePlaces', availablePlaces);
+
   return (
     <GlobalContainer>
       <GlobalStyle />
       <NavbarWrapper>
         <Navbar
+          mapRef={mapRef}
           setCoords={setCoords}
           visibleLots={visibleLots}
+          selected={selected}
           availablePlaces={availablePlaces}
         />
       </NavbarWrapper>
@@ -86,6 +87,7 @@ function App() {
           parkingLots={parkingLots}
           visibleLots={visibleLots}
           setVisibleLots={setVisibleLots}
+          availablePlaces={availablePlaces}
         />
       </MapWrapper>
     </GlobalContainer>

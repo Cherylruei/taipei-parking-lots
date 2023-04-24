@@ -183,12 +183,4 @@ html,body {
   font-style: normal;
 }
 
-/* RWD */
-@media screen and (min-width: 768px){
-}
-
-@media screen and (min-width: 1024px){
-
-}
-
 `;

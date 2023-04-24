@@ -32,9 +32,6 @@ export const NavbarWrapper = styled.div`
   height: 100vh;
   margin: 0px;
   background-color: var(--color-grey);
-  @media screen and (${device.lg}) {
-    height: 100%;
-  }
 `;
 
 export const MapWrapper = styled.div`
