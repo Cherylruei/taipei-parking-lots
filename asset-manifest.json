@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/taipei-parking-lots/static/js/main.d5dc1e60.js",
+    "main.js": "/taipei-parking-lots/static/js/main.75ceb14d.js",
     "static/media/car-side-solid.svg": "/taipei-parking-lots/static/media/car-side-solid.672e70cfd9170d4028bb065d07beab0b.svg",
-    "static/media/location-crosshairs-solid.svg": "/taipei-parking-lots/static/media/location-crosshairs-solid.9a563884abfa4e415ecf2335a52614da.svg",
+    "static/media/location-crosshairs-solid.svg": "/taipei-parking-lots/static/media/location-crosshairs-solid.40c721ab324a7e6590718e9a0e42d1c1.svg",
     "index.html": "/taipei-parking-lots/index.html",
-    "static/media/magnifying-glass-solid.svg": "/taipei-parking-lots/static/media/magnifying-glass-solid.797dbaf5fa99784ba4d1250d20a5f44f.svg",
-    "main.d5dc1e60.js.map": "/taipei-parking-lots/static/js/main.d5dc1e60.js.map"
+    "static/media/magnifying-glass-solid.svg": "/taipei-parking-lots/static/media/magnifying-glass-solid.0a111fffc2f5bd5f8b719147290e818e.svg",
+    "main.75ceb14d.js.map": "/taipei-parking-lots/static/js/main.75ceb14d.js.map"
   },
   "entrypoints": [
-    "static/js/main.d5dc1e60.js"
+    "static/js/main.75ceb14d.js"
   ]
 }
