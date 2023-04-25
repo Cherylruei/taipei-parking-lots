@@ -25,7 +25,6 @@ const StyledList = styled.ul`
 
 const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
   const [elRefs, setElRefs] = useState([]);
-  // const width = window.innerWidth;
 
   useEffect(() => {
     const refs = Array(visibleLots?.length)
@@ -33,8 +32,7 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
       .map((_, i) => elRefs[i] || createRef());
     // 為了要拿到第二個參數 index
     setElRefs(refs);
-    console.log('1223434');
-    console.log({ elRefs });
+    // console.log({ elRefs });
   }, [visibleLots]);
 
   useEffect(() => {
@@ -42,10 +40,13 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
       const index = visibleLots.findIndex((lot) => lot.id === selected.id);
       const { lat, lng } = transferLatLng(selected.tw97x, selected.tw97y);
       mapRef.current.panTo({ lat, lng });
+      // console.log({ visibleLots });
+      // console.log({ index });
+      // List 目前被點擊的停車場Marker無法準確的出現在list 可視區
       setTimeout(() => {
-        elRefs[index].current.scrollIntoView({
+        elRefs[index]?.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'nearest',
+          block: 'center',
         });
       }, 0);
     }
@@ -72,21 +73,35 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
 };
 
 const Navbar = ({
+  map,
+  setMap,
   setCoords,
   visibleLots,
   availablePlaces,
   selected,
+  setSelected,
   mapRef,
 }) => {
+  const width = window.innerWidth;
   return (
     <>
-      <SearchInput setCoords={setCoords} />
-      <List
-        mapRef={mapRef}
-        visibleLots={visibleLots}
-        availablePlaces={availablePlaces}
+      <SearchInput
+        map={map}
+        setMap={setMap}
+        setCoords={setCoords}
         selected={selected}
+        setSelected={setSelected}
       />
+      {width > '1023' ? (
+        <List
+          mapRef={mapRef}
+          visibleLots={visibleLots}
+          availablePlaces={availablePlaces}
+          selected={selected}
+        />
+      ) : (
+        ''
+      )}
     </>
   );
 };

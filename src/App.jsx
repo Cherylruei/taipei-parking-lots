@@ -29,6 +29,7 @@ function App() {
   // 地圖上被使用者點擊的地標，資料需要顯示在Header
   const [selected, setSelected] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [map, setMap] = useState(null);
 
   // 用 useRef 和 useCallback 去儲存 GoogleMap的實例
   const onLoad = useCallback((map) => {
@@ -70,15 +71,20 @@ function App() {
       <NavbarWrapper>
         <Navbar
           mapRef={mapRef}
+          map={map}
+          setMap={setMap}
           setCoords={setCoords}
           visibleLots={visibleLots}
           selected={selected}
+          setSelected={setSelected}
           availablePlaces={availablePlaces}
         />
       </NavbarWrapper>
       <MapWrapper>
         <Map
           onLoad={onLoad}
+          map={map}
+          setMap={setMap}
           setCoords={setCoords}
           selected={selected}
           setSelected={setSelected}

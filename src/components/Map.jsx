@@ -26,6 +26,8 @@ const mapContainerStyle = {
 
 const Map = ({
   onLoad,
+  map,
+  setMap,
   setCoords,
   selected,
   setSelected,
@@ -40,7 +42,6 @@ const Map = ({
   const [currentPosition, setCurrentPosition] = useState(coords);
   const [showPosition, setShowPosition] = useState(false);
   // map 是 google maps 的物件，設置 state的變數去追蹤他的變化
-  const [map, setMap] = useState(null);
   // 當地圖停止拖曳時為 true
   const [isMapIdle, setIsMapIdle] = useState(false);
 
@@ -48,6 +49,7 @@ const Map = ({
     () => ({
       disableDefaultUI: false,
       zoomControl: true,
+      libraries: ['places'],
     }),
     []
   );

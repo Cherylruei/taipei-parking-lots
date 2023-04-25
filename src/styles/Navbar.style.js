@@ -4,7 +4,8 @@ export const StyledSearch = styled.div`
   display: flex;
   align-items: center;
   max-width: 100%;
-  margin: 20px;
+  height: 3em;
+  margin: 10px 5px;
   background-color: var(--color-white);
   border: 1px solid var(--color-grey);
   border-radius: 1rem;
@@ -15,9 +16,10 @@ export const StyledSearch = styled.div`
     flex-grow: 1;
     border: none;
     max-width: 100%;
-    height: 40px;
-    font-size: var(--fs-h2);
+    height: 2em;
+    font-size: var(--fs-basic);
     border: none;
+    border-radius: 1rem;
     outline: none;
   }
 

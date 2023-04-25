@@ -1,29 +1,41 @@
 import { IconSearch } from 'assets/icons';
 import { StyledSearch } from 'styles/Navbar.style';
 import { Autocomplete } from '@react-google-maps/api';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-const SearchInput = ({ setCoords }) => {
-  const [autoComplete, setAutoComplete] = useState();
+const SearchInput = ({ map, setMap, setCoords }) => {
+  const autoCompleteRef = useRef(null);
 
-  const onLoad = (autoC) => setAutoComplete(autoC);
   const onPlaceChanged = () => {
-    if (autoComplete) {
-      const lat = autoComplete.getPlace().geometry.location.lat();
-      const lng = autoComplete.getPlace().geometry.location.lng();
+    if (autoCompleteRef.current !== null) {
+      console.log({ autoCompleteRef });
+      const place = autoCompleteRef.current.getPlace();
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
       setCoords({ lat, lng });
+      map.setCenter({ lat, lng });
     }
   };
 
+  // 設定 options 物件，讓google map 在載入時，就可以預先載入'places' 庫，並且能夠在 <AutoComplete>元件中使用
+  const options = {
+    componentRestrictions: { country: 'tw' },
+    libraries: ['places'],
+  };
+
   return (
-    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+    <Autocomplete
+      onLoad={(autoComplete) => (autoCompleteRef.current = autoComplete)}
+      onPlaceChanged={onPlaceChanged}
+      options={options}
+    >
       <StyledSearch>
         <IconSearch className='icon' />
         <input
           type='search'
           id='gsearch'
           name='gsearch'
-          placeholder='尋找停車場...'
+          placeholder='輸入地址或地標'
         />
       </StyledSearch>
     </Autocomplete>
