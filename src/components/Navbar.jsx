@@ -33,7 +33,7 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
     // 為了要拿到第二個參數 index
     setElRefs(refs);
     // console.log({ elRefs });
-  }, [visibleLots]);
+  }, [visibleLots, elRefs]);
 
   useEffect(() => {
     if (selected) {
@@ -50,6 +50,7 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
         });
       }, 0);
     }
+    // eslint-disable-next-line
   }, [selected]);
 
   return (

@@ -61,13 +61,16 @@ const Map = ({
     anchor: new window.google.maps.Point(15, 15),
   };
 
-  const handleLoad = useCallback((map) => {
-    mapRef.current = map;
-    setMap(map);
-    onLoad(map);
-    map.setZoom(16);
-    map.setCenter(coords);
-  }, []);
+  const handleLoad = useCallback(
+    (map) => {
+      mapRef.current = map;
+      setMap(map);
+      onLoad(map);
+      map.setZoom(16);
+      map.setCenter(coords);
+    },
+    [coords, onLoad, setMap]
+  );
 
   useEffect(() => {
     if (map) {
@@ -175,11 +178,14 @@ const Map = ({
             <div>
               <h2>{selected.name}</h2>
               <p>總停車位:{selected.totalcar}</p>
-              {availablePlaces?.map((place) => {
-                if (place.id === selected.id) {
-                  return <p key={place.id}>剩餘空位:{place.availablecar}</p>;
-                }
-              })}
+              {
+                // eslint-disable-next-line array-callback-return
+                availablePlaces?.map((place) => {
+                  if (place.id === selected.id) {
+                    return <p key={place.id}>剩餘空位:{place.availablecar}</p>;
+                  }
+                })
+              }
             </div>
           </InfoWindow>
         ) : null}

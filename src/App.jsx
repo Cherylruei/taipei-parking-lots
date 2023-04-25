@@ -28,6 +28,7 @@ function App() {
   const [availablePlaces, setAvailablePlaces] = useState([]);
   // 地圖上被使用者點擊的地標，資料需要顯示在Header
   const [selected, setSelected] = useState(null);
+  //eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
   const [map, setMap] = useState(null);
 
