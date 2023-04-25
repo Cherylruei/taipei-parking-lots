@@ -2,38 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 
-@font-face {
-  font-family: "Noto Sans TC";
-  src:url(/public/fonts/NotoSansHK-Light.woff2) format("woff2"), 
-      url(/public/fonts/NotoSansHK-Light.woff) format("woff"),
-      url(/public/fonts/NotoSansHK-Light.otf) format('opentype'); 
-  font-weight: 300;
-  font-style: light;
-  unicode-range: U+4E00-9FFF, U+00-024F;
-}
-
-@font-face {
-  font-family: "Noto Sans TC";
-  src:url(/public/fonts/NotoSansHK-Medium.woff2) format("woff2"),
-      url(/public/fonts/NotoSansHK-Medium.woff) format("woff"),
-      url(/public/fonts/NotoSansHK-Medium.otf) format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  unicode-range: U+4E00-9FFF, U+00-024F;
-}
-
-@font-face {
-  font-family: "Noto Sans TC";
-  src:url(/public/fonts/NotoSansHK-Bold.woff2) format("woff2"),
-      url(/public/fonts/NotoSansHK-Bold.woff) format("woff"),
-      url(/public/fonts/NotoSansHK-Bold.otf) format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  unicode-range: U+4E00-9FFF, U+00-024F;
-}
-
-
-
 /* css reset */
 html,
 body,
@@ -178,8 +146,8 @@ table {
 html,body {
   min-height: 100%;
   scroll-behavior: smooth;
-  font-family: "Noto Sans TC";
-  font-weight: 400;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
   font-style: normal;
 }
 

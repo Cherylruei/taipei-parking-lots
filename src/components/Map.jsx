@@ -144,8 +144,6 @@ const Map = ({
     }
   };
 
-  console.log({ selected });
-
   return (
     <>
       <GoogleMap
