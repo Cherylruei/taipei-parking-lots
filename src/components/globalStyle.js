@@ -4,9 +4,10 @@ export const GlobalStyle = createGlobalStyle`
 
 @font-face {
   font-family: "Noto Sans TC";
-  src: url("/fonts/NotoSansHK-Light.woff2") format("woff2"),
-       url("/fonts/NotoSansHK-Light.woff") format("woff"),
-       url("/fonts/NotoSansHK-Light.otf") format('opentype');
+  src:url("/fonts/NotoSansHK-Light.otf") format('opentype'); 
+        /* url("/fonts/NotoSansHK-Light.woff2") format("woff2"), */
+       /* url("/fonts/NotoSansHK-Light.woff") format("woff"), */
+      
   font-weight: 300;
   font-style: light;
   unicode-range: U+4E00-9FFF, U+00-024F;

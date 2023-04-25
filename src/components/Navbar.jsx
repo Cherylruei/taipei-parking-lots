@@ -1,4 +1,4 @@
-import SearchInput from './SearchInput';
+import SearchInput from 'components/SearchInput';
 import styled from 'styled-components';
 import { useState, useEffect, createRef } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
@@ -32,8 +32,8 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
       .map((_, i) => elRefs[i] || createRef());
     // 為了要拿到第二個參數 index
     setElRefs(refs);
-    // console.log({ elRefs });
-  }, [visibleLots, elRefs]);
+    // eslint-disable-next-line
+  }, [visibleLots]);
 
   useEffect(() => {
     if (selected) {

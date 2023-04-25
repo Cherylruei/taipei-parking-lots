@@ -3,7 +3,7 @@ import Navbar from 'components/Navbar';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { GlobalStyle } from 'components/globalStyle';
 import { GlobalContainer } from 'styles/Container.styled';
-import { MapWrapper, NavbarWrapper } from './styles/Container.styled';
+import { MapWrapper, NavbarWrapper } from 'styles/Container.styled';
 import { getAvailableLots, getPlacesData } from 'api';
 
 function App() {

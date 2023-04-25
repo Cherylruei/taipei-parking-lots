@@ -1,7 +1,7 @@
 import { IconSearch } from 'assets/icons';
 import { StyledSearch } from 'styles/Navbar.style';
 import { Autocomplete } from '@react-google-maps/api';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 const SearchInput = ({ map, setMap, setCoords }) => {
   const autoCompleteRef = useRef(null);
