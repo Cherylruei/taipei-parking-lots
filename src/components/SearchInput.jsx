@@ -13,14 +13,12 @@ const SearchInput = ({ map, setMap, setCoords }) => {
       const lat = place.geometry.location.lat();
       const lng = place.geometry.location.lng();
       setCoords({ lat, lng });
-      map.setCenter({ lat, lng });
+      map?.setCenter({ lat, lng });
     }
   };
 
-  // 設定 options 物件，讓google map 在載入時，就可以預先載入'places' 庫，並且能夠在 <AutoComplete>元件中使用
   const options = {
     componentRestrictions: { country: 'tw' },
-    libraries: ['places'],
   };
 
   return (

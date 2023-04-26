@@ -49,7 +49,6 @@ const Map = ({
     () => ({
       disableDefaultUI: false,
       zoomControl: true,
-      libraries: ['places'],
     }),
     []
   );
