@@ -2,6 +2,17 @@ import { GoogleMap, InfoWindow, MarkerF } from '@react-google-maps/api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 import { IconLocation } from 'assets/icons';
+import styled from 'styled-components';
+
+const StyledLocation = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--color-white);
+  border-radius: 5px;
+`;
 
 // 轉TWD和經緯度的function
 function transferLatLng(x, y) {
@@ -11,11 +22,11 @@ function transferLatLng(x, y) {
 
 const LocationBtn = ({ handleUserLocation }) => {
   return (
-    <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-      <button onClick={handleUserLocation}>
-        <IconLocation />
-      </button>
-    </div>
+    <StyledLocation
+      style={{ position: 'absolute', top: '10px', right: '60px' }}
+    >
+      <IconLocation onClick={handleUserLocation} />
+    </StyledLocation>
   );
 };
 
