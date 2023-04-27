@@ -5,8 +5,16 @@ import { GlobalStyle } from 'components/globalStyle';
 import { GlobalContainer } from 'styles/Container.styled';
 import { MapWrapper, NavbarWrapper } from 'styles/Container.styled';
 import { getAvailableLots, getPlacesData } from 'api';
+import { useJsApiLoader } from '@react-google-maps/api';
+
+const libraries = ['places'];
 
 function App() {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
   // 台北市的經緯度:預設位置, 使用useMemo hook (dependencies [])只會渲染一次
   const defaultCenter = useMemo(
     () => ({
@@ -36,7 +44,6 @@ function App() {
   const onLoad = useCallback((map) => {
     mapRef.current = map;
     // 初始化時獲取附近停車場
-    // getParkingLots(map.getCenter());
   }, []);
 
   // 之後再解決 useEffect
@@ -65,15 +72,15 @@ function App() {
     setIsLoading(true);
     getParkingLots();
   }, []);
-
+  console.log({ parkingLots });
   return (
     <GlobalContainer>
       <GlobalStyle />
       <NavbarWrapper>
         <Navbar
+          isLoaded={isLoaded}
           mapRef={mapRef}
           map={map}
-          setMap={setMap}
           setCoords={setCoords}
           visibleLots={visibleLots}
           selected={selected}
@@ -83,6 +90,7 @@ function App() {
       </NavbarWrapper>
       <MapWrapper>
         <Map
+          isLoaded={isLoaded}
           onLoad={onLoad}
           map={map}
           setMap={setMap}

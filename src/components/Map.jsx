@@ -8,10 +8,11 @@ const StyledLocation = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 2.5em;
+  height: 2.5em;
   background: var(--color-white);
   border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
 // 轉TWD和經緯度的function
@@ -23,7 +24,7 @@ function transferLatLng(x, y) {
 const LocationBtn = ({ handleUserLocation }) => {
   return (
     <StyledLocation
-      style={{ position: 'absolute', top: '10px', right: '60px' }}
+      style={{ position: 'absolute', top: '0.625em', right: '3.75em' }}
     >
       <IconLocation onClick={handleUserLocation} />
     </StyledLocation>
@@ -36,6 +37,7 @@ const mapContainerStyle = {
 };
 
 const Map = ({
+  isLoaded,
   onLoad,
   map,
   setMap,
@@ -56,6 +58,7 @@ const Map = ({
   // 當地圖停止拖曳時為 true
   const [isMapIdle, setIsMapIdle] = useState(false);
 
+  console.log({ isLoaded });
   const options = useMemo(
     () => ({
       disableDefaultUI: false,
@@ -63,13 +66,6 @@ const Map = ({
     }),
     []
   );
-
-  const icon = {
-    url: 'https://iili.io/Hv8XDnR.png',
-    scaledSize: new window.google.maps.Size(30, 30),
-    origin: new window.google.maps.Point(0, 0),
-    anchor: new window.google.maps.Point(15, 15),
-  };
 
   const handleLoad = useCallback((map) => {
     mapRef.current = map;
@@ -156,49 +152,64 @@ const Map = ({
 
   return (
     <>
-      <GoogleMap
-        id='map'
-        mapContainerStyle={mapContainerStyle}
-        options={options}
-        onLoad={handleLoad}
-      >
-        {showPosition && <MarkerF position={currentPosition} icon={icon} />}
-        {visibleLots &&
-          visibleLots?.map((parkingLot) => {
-            return (
-              <MarkerF
-                key={parkingLot.id}
-                position={transferLatLng(parkingLot.tw97x, parkingLot.tw97y)}
-                onClick={() => {
-                  setSelected(parkingLot);
-                }}
-              />
-            );
-          })}
-        {selected ? (
-          <InfoWindow
-            position={transferLatLng(selected.tw97x, selected.tw97y)}
-            onCloseClick={handleCloseInfo}
-            visible={selected !== null}
-          >
-            <div>
-              <h2>{selected.name}</h2>
-              <p>總停車位:{selected.totalcar}</p>
-              {
-                // eslint-disable-next-line
-                availablePlaces?.map((place) => {
-                  if (place.id === selected.id) {
-                    return <p key={place.id}>剩餘空位:{place.availablecar}</p>;
-                  }
-                })
-              }
-            </div>
-          </InfoWindow>
-        ) : null}
-        {/* {console.log('selected2', selected)} */}
-        {/* Child components, such as markers, info windows, etc. */}
-        <LocationBtn handleUserLocation={handleUserLocation} />
-      </GoogleMap>
+      {isLoaded ? (
+        <GoogleMap
+          id='map'
+          mapContainerStyle={mapContainerStyle}
+          options={options}
+          onLoad={handleLoad}
+        >
+          {/* {showPosition && <MarkerF position={currentPosition} icon={icon} />} */}
+          {showPosition && (
+            <MarkerF
+              position={currentPosition}
+              icon={{
+                url: 'https://iili.io/Hv8XDnR.png',
+                scaledSize: new window.google.maps.Size(30, 30),
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+              }}
+            />
+          )}
+          {visibleLots &&
+            visibleLots?.map((parkingLot) => {
+              return (
+                <MarkerF
+                  key={parkingLot.id}
+                  position={transferLatLng(parkingLot.tw97x, parkingLot.tw97y)}
+                  onClick={() => {
+                    setSelected(parkingLot);
+                  }}
+                />
+              );
+            })}
+          {selected ? (
+            <InfoWindow
+              position={transferLatLng(selected.tw97x, selected.tw97y)}
+              onCloseClick={handleCloseInfo}
+              visible={selected !== null}
+            >
+              <div>
+                <h2>{selected.name}</h2>
+                <p>總停車位:{selected.totalcar}</p>
+                {
+                  // eslint-disable-next-line
+                  availablePlaces?.map((place) => {
+                    if (place.id === selected.id) {
+                      return (
+                        <p key={place.id}>剩餘空位:{place.availablecar}</p>
+                      );
+                    }
+                  })
+                }
+              </div>
+            </InfoWindow>
+          ) : null}
+          <LocationBtn handleUserLocation={handleUserLocation} />
+        </GoogleMap>
+      ) : (
+        <div>Map is Loading</div>
+      )}
     </>
   );
 };

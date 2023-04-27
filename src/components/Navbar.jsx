@@ -74,24 +74,34 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
 };
 
 const Navbar = ({
+  isLoaded,
   map,
-  setMap,
   setCoords,
   visibleLots,
   availablePlaces,
   selected,
   setSelected,
   mapRef,
+  onPlaceChanged,
+  onLoadAuto,
+  autoComplete,
+  setAutoComplete,
+  autoCompleteRef,
 }) => {
   const width = window.innerWidth;
   return (
     <>
       <SearchInput
+        isLoaded={isLoaded}
         map={map}
-        setMap={setMap}
         setCoords={setCoords}
         selected={selected}
         setSelected={setSelected}
+        onPlaceChanged={onPlaceChanged}
+        onLoadAuto={onLoadAuto}
+        autoComplete={autoComplete}
+        setAutoComplete={setAutoComplete}
+        autoCompleteRef={autoCompleteRef}
       />
       {width > '1023' ? (
         <List
