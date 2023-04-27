@@ -137,7 +137,8 @@ table {
   --fs-h2: 1.75rem;
   --fs-h1: 2rem;
   /* colors */
-  --color-theme: #0ed7da;
+  --color-theme:#004581;
+  --color-secondary: #a5ceea;
   --color-grey: #f0f0f0;
   --color-white-grey: #f9f9f9;
   --color-white: #ffffff;
@@ -149,6 +150,7 @@ html,body {
   font-family: 'Noto Sans TC', sans-serif;
   font-weight: 300;
   font-style: normal;
+  background: #ebf2f8
 }
 
 `;

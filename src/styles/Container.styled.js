@@ -25,19 +25,42 @@ export const GlobalContainer = styled.div`
 `;
 
 export const NavbarWrapper = styled.div`
+  position: absolute;
+  top: 0.1em;
+  left: 50%;
+  transform: translate(-50%, 0%);
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 100%;
   max-height: 30vh;
   margin: 0px;
-  background-color: var(--color-grey);
+  z-index: 1000;
   @media screen and (${device.lg}) {
+    position: static;
+    transform: none;
+    top: auto;
+    left: auto;
     max-height: 100vh;
   }
 `;
 
 export const MapWrapper = styled.div`
+  max-height: 100vh;
+
+  div.gm-style-iw .gm-style-iw-c {
+    display: none;
+  }
+
+  .gm-style {
+    font: 600 12px Roboto, Arial, sans-serif;
+    color: var(--color-theme);
+    font-weight: 400px;
+  }
+  /* .infoWindow {
+    color: var(--color-theme);
+    font-weight: 600px;
+  } */
   @media screen and (${device.lg}) {
     grid-column-start: 2;
     grid-column-end: 3;

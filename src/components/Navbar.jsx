@@ -1,5 +1,5 @@
 import SearchInput from 'components/SearchInput';
-import styled from 'styled-components';
+import { StyledList } from 'styles/Navbar.style';
 import { useState, useEffect, createRef } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 
@@ -8,20 +8,6 @@ function transferLatLng(x, y) {
   const { lat, lng } = twd97tolatlng(x, y);
   return { lat, lng };
 }
-
-const StyledList = styled.ul`
-  overflow-y: scroll;
-  div {
-    margin: 16px 16px;
-    padding: 5px 16px;
-    line-height: 1.5rem;
-    border: 2px solid var(--color-white-grey);
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 5px;
-    h2 {
-      font-weight: 700;
-    }
-  }
-`;
 
 const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
   const [elRefs, setElRefs] = useState([]);

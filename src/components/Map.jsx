@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 import { IconLocation } from 'assets/icons';
 import styled from 'styled-components';
+import car from 'assets/icons/car.png';
+import parking from 'assets/icons/parking.png';
 
 const StyledLocation = styled.div`
   display: flex;
@@ -24,7 +26,7 @@ function transferLatLng(x, y) {
 const LocationBtn = ({ handleUserLocation }) => {
   return (
     <StyledLocation
-      style={{ position: 'absolute', top: '0.625em', right: '3.75em' }}
+      style={{ position: 'absolute', bottom: '11.625em', right: '0.625em' }}
     >
       <IconLocation onClick={handleUserLocation} />
     </StyledLocation>
@@ -56,12 +58,15 @@ const Map = ({
   // map 是 google maps 的物件，設置 state的變數去追蹤他的變化
   // 當地圖停止拖曳時為 true
   const [isMapIdle, setIsMapIdle] = useState(false);
+  // eslint-disable-next-line
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log({ isLoaded });
   const options = useMemo(
     () => ({
       disableDefaultUI: false,
       zoomControl: true,
+      mapTypeControl: false,
     }),
     []
   );
@@ -136,6 +141,7 @@ const Map = ({
           return bounds.contains(new window.google.maps.LatLng(lat, lng));
         });
         setVisibleLots(visibleLots);
+        setIsLoading(true);
       },
       () => {
         alert('請允許存取使用者位置來使用此功能');
@@ -158,23 +164,18 @@ const Map = ({
           options={options}
           onLoad={handleLoad}
         >
-          {/* {showPosition && <MarkerF position={currentPosition} icon={icon} />} */}
-          {showPosition && (
-            <MarkerF
-              position={currentPosition}
-              icon={{
-                url: 'https://iili.io/Hv8XDnR.png',
-                scaledSize: new window.google.maps.Size(30, 30),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(15, 15),
-              }}
-            />
-          )}
           {visibleLots &&
             visibleLots?.map((parkingLot) => {
               return (
                 <MarkerF
                   key={parkingLot.id}
+                  icon={{
+                    url: parking,
+                    scaledSize: new window.google.maps.Size(40, 40),
+                    origin: new window.google.maps.Point(0, 0),
+                    anchor: new window.google.maps.Point(15, 15),
+                    zIndex: 1,
+                  }}
                   position={transferLatLng(parkingLot.tw97x, parkingLot.tw97y)}
                   onClick={() => {
                     setSelected(parkingLot);
@@ -187,14 +188,15 @@ const Map = ({
               position={transferLatLng(selected.tw97x, selected.tw97y)}
               onCloseClick={handleCloseInfo}
               visible={selected !== null}
+              className='infoWindow'
             >
-              <div>
+              <div className='infoWindow'>
                 <h2>{selected.name}</h2>
                 <p>總停車位:{selected.totalcar}</p>
                 {
                   // eslint-disable-next-line
                   availablePlaces?.map((place) => {
-                    if (place.id === selected.id) {
+                    if (place.id === selected.id && place.availablecar >= 0) {
                       return (
                         <p key={place.id}>剩餘空位:{place.availablecar}</p>
                       );
@@ -204,6 +206,19 @@ const Map = ({
               </div>
             </InfoWindow>
           ) : null}
+          {/* {showPosition && <MarkerF position={currentPosition} icon={icon} />} */}
+          {showPosition && (
+            <MarkerF
+              position={currentPosition}
+              icon={{
+                url: car,
+                scaledSize: new window.google.maps.Size(40, 40),
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+                zIndex: 1000,
+              }}
+            />
+          )}
           <LocationBtn handleUserLocation={handleUserLocation} />
         </GoogleMap>
       ) : (

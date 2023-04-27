@@ -67,6 +67,7 @@ function App() {
       console.log(error);
     }
   };
+  console.log({ isLoading });
 
   useEffect(() => {
     setIsLoading(true);

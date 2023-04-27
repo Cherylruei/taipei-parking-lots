@@ -37,7 +37,7 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
         >
           <StyledSearch>
             <IconSearch className='icon' />
-            <input type='search' placeholder='輸入地址或地標' />
+            <input type='search' placeholder='輸入地址或地標...' />
           </StyledSearch>
         </Autocomplete>
       ) : (
