@@ -50,7 +50,6 @@ const Map = ({
   setVisibleLots,
   availablePlaces,
 }) => {
-  // 使用者現在的位置和地圖的中心不一定是同一個，因為還要能拖曳地圖去看使用者位置以外的停車場
   const mapRef = useRef(null);
   const [currentPosition, setCurrentPosition] = useState(coords);
   const [showPosition, setShowPosition] = useState(false);
