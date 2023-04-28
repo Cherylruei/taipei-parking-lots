@@ -74,7 +74,6 @@ const Navbar = ({
   setAutoComplete,
   autoCompleteRef,
 }) => {
-  const width = window.innerWidth;
   return (
     <>
       <SearchInput
@@ -89,16 +88,12 @@ const Navbar = ({
         setAutoComplete={setAutoComplete}
         autoCompleteRef={autoCompleteRef}
       />
-      {width > '1023' ? (
-        <List
-          mapRef={mapRef}
-          visibleLots={visibleLots}
-          availablePlaces={availablePlaces}
-          selected={selected}
-        />
-      ) : (
-        ''
-      )}
+      <List
+        mapRef={mapRef}
+        visibleLots={visibleLots}
+        availablePlaces={availablePlaces}
+        selected={selected}
+      />
     </>
   );
 };

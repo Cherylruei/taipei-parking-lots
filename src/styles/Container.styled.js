@@ -36,12 +36,19 @@ export const NavbarWrapper = styled.div`
   max-height: 30vh;
   margin: 0px;
   z-index: 1000;
+  .gjcrkW div {
+    display: none;
+  }
+
   @media screen and (${device.lg}) {
     position: static;
     transform: none;
     top: auto;
     left: auto;
     max-height: 100vh;
+    .gjcrkW div {
+      display: block;
+    }
   }
 `;
 
@@ -53,14 +60,10 @@ export const MapWrapper = styled.div`
   }
 
   .gm-style {
-    font: 600 12px Roboto, Arial, sans-serif;
+    font: 700 12px Noto Sans TC, Arial, sans-serif;
     color: var(--color-theme);
-    font-weight: 400px;
   }
-  /* .infoWindow {
-    color: var(--color-theme);
-    font-weight: 600px;
-  } */
+
   @media screen and (${device.lg}) {
     grid-column-start: 2;
     grid-column-end: 3;
