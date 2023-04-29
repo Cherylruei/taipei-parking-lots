@@ -36,7 +36,7 @@ export const NavbarWrapper = styled.div`
   max-height: 30vh;
   margin: 0px;
   z-index: 1000;
-  .gjcrkW div {
+  .cqRljJ {
     display: none;
   }
 
@@ -46,7 +46,7 @@ export const NavbarWrapper = styled.div`
     top: auto;
     left: auto;
     max-height: 100vh;
-    .gjcrkW div {
+    .cqRljJ {
       display: block;
     }
   }

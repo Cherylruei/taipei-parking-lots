@@ -1,10 +1,14 @@
-import { GoogleMap, InfoWindow, MarkerF } from '@react-google-maps/api';
+import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 import { IconLocation } from 'assets/icons';
 import styled from 'styled-components';
 import car from 'assets/icons/car.png';
 import parking from 'assets/icons/parking.png';
+import {
+  MarkerClusterer,
+  SuperClusterAlgorithm,
+} from '@googlemaps/markerclusterer';
 
 const StyledLocation = styled.div`
   display: flex;
@@ -14,6 +18,23 @@ const StyledLocation = styled.div`
   height: 2.5em;
   background: var(--color-white);
   border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+`;
+
+const StyledLoading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 15em;
+  height: 5em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  color: var(--color-theme);
+  background: var(--color-secondary);
+  border-radius: 5px;
+  border: 3px solid var(--color-theme);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
@@ -60,6 +81,7 @@ const Map = ({
   const [isMapIdle, setIsMapIdle] = useState(false);
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
+  const [currentInfoWindow, setCurrentInfoWindow] = useState(null);
 
   console.log({ isLoaded });
   const options = useMemo(
@@ -91,6 +113,7 @@ const Map = ({
     }
   }, [map]);
 
+  console.log({ selected });
   useEffect(() => {
     if (isMapIdle) {
       const bounds = map.getBounds();
@@ -98,9 +121,66 @@ const Map = ({
         const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
         return bounds.contains(new window.google.maps.LatLng(lat, lng));
       });
+      const markers = visibleLots.map((parkingLot) => {
+        const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
+        const selectedMarker = parkingLot;
+        const marker = new window.google.maps.Marker({
+          key: parkingLot.id,
+          position: { lat, lng },
+          icon: {
+            url: parking,
+            scaledSize: new window.google.maps.Size(40, 40),
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(15, 15),
+            zIndex: 1,
+          },
+        });
+        const infoWindow = new window.google.maps.InfoWindow();
+        marker.addListener('click', () => {
+          // eslint-disable-next-line
+          const lot = availablePlaces?.find((place) => {
+            if (place.id === selectedMarker.id && place.availablecar >= 0)
+              return place;
+          });
+          setSelected(lot);
+          if (currentInfoWindow) {
+            currentInfoWindow.close();
+            setCurrentInfoWindow(null);
+          }
+          infoWindow.setContent(`
+              <div>
+                <h2>${selectedMarker.name}</h2>
+                <p>
+                  總停車位: <b>${selectedMarker.totalcar}</b>
+                </p>
+                <p>
+                  剩餘空位: <b>${
+                    lot.availablecar >= 0
+                      ? lot.availablecar
+                      : '空位目前尚無法取得'
+                  }</b>
+                </p>
+              </div>
+          `);
+          console.log({ infoWindow });
+          infoWindow.open(map, marker);
+          setCurrentInfoWindow(infoWindow);
+          // 之後用來使用顯示 selected 的資訊視窗
+          setSelected(selectedMarker);
+        });
+        return marker;
+      });
+
+      new MarkerClusterer({
+        map,
+        markers,
+        algorithm: new SuperClusterAlgorithm({ radius: 300 }),
+      });
+
       setVisibleLots(visibleLots);
       setIsMapIdle(false);
     }
+    // eslint-disable-next-line
   }, [map, isMapIdle, visibleLots, setVisibleLots, parkingLots]);
 
   const handleUserLocation = () => {
@@ -111,7 +191,7 @@ const Map = ({
           lng: position.coords.longitude,
         };
         setCoords(userPosition);
-        setCurrentPosition(coords);
+        setCurrentPosition(userPosition);
         setShowPosition(true);
 
         const radius = 0.001; // 使用者使用定位中心上下左右個擴展 0.001 (經緯度) 經度約280公尺
@@ -149,11 +229,11 @@ const Map = ({
     );
   };
 
-  const handleCloseInfo = () => {
-    if (selected !== null) {
-      setSelected(null);
-    }
-  };
+  // const handleCloseInfo = () => {
+  //   if (selected !== null) {
+  //     setSelected(null);
+  //   }
+  // };
 
   return (
     <>
@@ -164,49 +244,6 @@ const Map = ({
           options={options}
           onLoad={handleLoad}
         >
-          {visibleLots &&
-            visibleLots?.map((parkingLot) => {
-              return (
-                <MarkerF
-                  key={parkingLot.id}
-                  icon={{
-                    url: parking,
-                    scaledSize: new window.google.maps.Size(40, 40),
-                    origin: new window.google.maps.Point(0, 0),
-                    anchor: new window.google.maps.Point(15, 15),
-                    zIndex: 1,
-                  }}
-                  position={transferLatLng(parkingLot.tw97x, parkingLot.tw97y)}
-                  onClick={() => {
-                    setSelected(parkingLot);
-                  }}
-                />
-              );
-            })}
-          {selected ? (
-            <InfoWindow
-              position={transferLatLng(selected.tw97x, selected.tw97y)}
-              onCloseClick={handleCloseInfo}
-              visible={selected !== null}
-              className='infoWindow'
-            >
-              <div className='infoWindow'>
-                <h2>{selected.name}</h2>
-                <p>總停車位:{selected.totalcar}</p>
-                {
-                  // eslint-disable-next-line
-                  availablePlaces?.map((place) => {
-                    if (place.id === selected.id && place.availablecar >= 0) {
-                      return (
-                        <p key={place.id}>剩餘空位:{place.availablecar}</p>
-                      );
-                    }
-                  })
-                }
-              </div>
-            </InfoWindow>
-          ) : null}
-          {/* {showPosition && <MarkerF position={currentPosition} icon={icon} />} */}
           {showPosition && (
             <MarkerF
               position={currentPosition}
@@ -220,6 +257,9 @@ const Map = ({
             />
           )}
           <LocationBtn handleUserLocation={handleUserLocation} />
+          {!parkingLots.length > 0 && (
+            <StyledLoading>停車場資料加載中...</StyledLoading>
+          )}
         </GoogleMap>
       ) : (
         <div>Map is Loading</div>
