@@ -36,9 +36,6 @@ export const NavbarWrapper = styled.div`
   max-height: 30vh;
   margin: 0px;
   z-index: 1000;
-  .cqRljJ {
-    display: none;
-  }
 
   @media screen and (${device.lg}) {
     position: static;
@@ -46,18 +43,11 @@ export const NavbarWrapper = styled.div`
     top: auto;
     left: auto;
     max-height: 100vh;
-    .cqRljJ {
-      display: block;
-    }
   }
 `;
 
 export const MapWrapper = styled.div`
   max-height: 100vh;
-
-  div.gm-style-iw .gm-style-iw-c {
-    display: none;
-  }
 
   .gm-style {
     font: 700 12px Noto Sans TC, Arial, sans-serif;

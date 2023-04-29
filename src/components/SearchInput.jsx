@@ -1,5 +1,5 @@
 import { IconSearch } from 'assets/icons';
-import { StyledSearch } from 'styles/Navbar.style';
+import { StyledSearch } from 'styles/Navbar.styled';
 import { Autocomplete } from '@react-google-maps/api';
 import { useRef } from 'react';
 

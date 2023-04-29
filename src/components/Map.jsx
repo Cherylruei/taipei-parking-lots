@@ -117,11 +117,11 @@ const Map = ({
   useEffect(() => {
     if (isMapIdle) {
       const bounds = map.getBounds();
-      const visibleLots = parkingLots.filter((parkingLot) => {
+      const visibleLots = parkingLots?.filter((parkingLot) => {
         const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
         return bounds.contains(new window.google.maps.LatLng(lat, lng));
       });
-      const markers = visibleLots.map((parkingLot) => {
+      const markers = visibleLots?.map((parkingLot) => {
         const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
         const selectedMarker = parkingLot;
         const marker = new window.google.maps.Marker({
@@ -139,8 +139,7 @@ const Map = ({
         marker.addListener('click', () => {
           // eslint-disable-next-line
           const lot = availablePlaces?.find((place) => {
-            if (place.id === selectedMarker.id && place.availablecar >= 0)
-              return place;
+            if (place.id === selectedMarker.id) return place;
           });
           setSelected(lot);
           if (currentInfoWindow) {
@@ -162,7 +161,6 @@ const Map = ({
                 </p>
               </div>
           `);
-          console.log({ infoWindow });
           infoWindow.open(map, marker);
           setCurrentInfoWindow(infoWindow);
           // 之後用來使用顯示 selected 的資訊視窗
@@ -228,12 +226,6 @@ const Map = ({
       }
     );
   };
-
-  // const handleCloseInfo = () => {
-  //   if (selected !== null) {
-  //     setSelected(null);
-  //   }
-  // };
 
   return (
     <>

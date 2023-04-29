@@ -1,5 +1,5 @@
 import SearchInput from 'components/SearchInput';
-import { StyledList } from 'styles/Navbar.style';
+import { StyledList } from 'styles/Navbar.styled';
 import { useState, useEffect, createRef } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 
@@ -38,20 +38,26 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
     }
     // eslint-disable-next-line
   }, [selected]);
-
+  console.log({ visibleLots });
   return (
     <StyledList>
       {visibleLots?.map((parkingLot, i) => {
-        const availablePlace = availablePlaces.find(
+        const availablePlace = availablePlaces?.find(
           (place) => place.id === parkingLot.id
         );
+        console.log({ availablePlace });
         const refProp = elRefs[i];
         return (
           <div key={parkingLot.id} ref={refProp}>
             <h2>{parkingLot.name}</h2>
             <p>地址:{parkingLot.address}</p>
             <p>總停車位:{parkingLot.totalcar}</p>
-            <p>剩餘空位:{availablePlace.availablecar}</p>
+            <p>
+              剩餘空位:
+              {availablePlace.availablecar >= 0
+                ? availablePlace.availablecar
+                : '空位目前尚無法取得'}
+            </p>
           </div>
         );
       })}

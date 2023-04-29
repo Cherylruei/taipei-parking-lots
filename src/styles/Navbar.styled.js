@@ -33,6 +33,7 @@ export const StyledSearch = styled.div`
 
 export const StyledList = styled.ul`
   overflow-y: scroll;
+  display: none;
   div {
     margin: 16px 16px;
     padding: 5px 16px;
@@ -45,5 +46,8 @@ export const StyledList = styled.ul`
     h2 {
       font-weight: 500;
     }
+  }
+  @media screen and (min-width: 1024px) {
+    display: block;
   }
 `;
