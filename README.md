@@ -19,7 +19,8 @@ This project is available for both mobile and desktop devices, supported by goog
 
 ## :desktop_computer:	 Desktop version
 Once user allows to show current position, the car icon shows on the map as user current location.  
-List on the left side only shows in desktop version.
+List on the left side only shows in desktop version.  
+
 <img width="946" alt="image" src="https://user-images.githubusercontent.com/117626038/235329085-071e07c3-9536-4626-a063-2a730d465c95.png">
 
 
