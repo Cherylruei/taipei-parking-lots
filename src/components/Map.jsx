@@ -1,42 +1,14 @@
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import twd97tolatlng from 'twd97-to-latlng';
 import { IconLocation } from 'assets/icons';
-import styled from 'styled-components';
 import car from 'assets/icons/car.png';
 import parking from 'assets/icons/parking.png';
 import {
   MarkerClusterer,
   SuperClusterAlgorithm,
 } from '@googlemaps/markerclusterer';
-
-const StyledLocation = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 2.5em;
-  height: 2.5em;
-  background: var(--color-white);
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-`;
-
-const StyledLoading = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  width: 15em;
-  height: 5em;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 50%);
-  color: var(--color-theme);
-  background: var(--color-secondary);
-  border-radius: 5px;
-  border: 3px solid var(--color-theme);
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-`;
+import { StyledLoading, StyledLocation } from 'styles/Map.styled';
 
 // 轉TWD和經緯度的function
 function transferLatLng(x, y) {
@@ -63,6 +35,7 @@ const Map = ({
   isLoaded,
   onLoad,
   map,
+  mapRef,
   setMap,
   setCoords,
   selected,
@@ -73,7 +46,6 @@ const Map = ({
   setVisibleLots,
   availablePlaces,
 }) => {
-  const mapRef = useRef(null);
   const [currentPosition, setCurrentPosition] = useState(coords);
   const [showPosition, setShowPosition] = useState(false);
   // map 是 google maps 的物件，設置 state的變數去追蹤他的變化
@@ -83,7 +55,6 @@ const Map = ({
   const [isLoading, setIsLoading] = useState(false);
   const [currentInfoWindow, setCurrentInfoWindow] = useState(null);
 
-  console.log({ isLoaded });
   const options = useMemo(
     () => ({
       disableDefaultUI: false,

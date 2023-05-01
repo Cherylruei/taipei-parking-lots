@@ -93,6 +93,7 @@ function App() {
         <Map
           isLoaded={isLoaded}
           onLoad={onLoad}
+          mapRef={mapRef}
           map={map}
           setMap={setMap}
           setCoords={setCoords}

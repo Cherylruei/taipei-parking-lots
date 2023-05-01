@@ -1,9 +1,10 @@
 import { IconSearch } from 'assets/icons';
 import { StyledSearch } from 'styles/Navbar.styled';
 import { Autocomplete } from '@react-google-maps/api';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const SearchInput = ({ map, setCoords, isLoaded }) => {
+  const [searchInput, setSearchInput] = useState('');
   const autoCompleteRef = useRef(null);
 
   const handleLoad = (autoComplete) => {
@@ -17,10 +18,36 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
       if (place && place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
+        setSearchInput(place.formatted_address);
         setCoords({ lat, lng });
         map?.setCenter({ lat, lng });
       }
     }
+  };
+
+  const onSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const onSearchInputKeydown = (e) => {
+    if (e.key === 'Enter') {
+      geocodeAddress(searchInput);
+    }
+  };
+
+  const geocodeAddress = (address) => {
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address }, (result, status) => {
+      if (status === 'OK') {
+        const lat = result[0].geometry.location.lat();
+        const lng = result[0].geometry.location.lng();
+        map?.setCenter({ lat, lng });
+      } else {
+        console.log(
+          `Geocode was not successful for the following reason ${status}`
+        );
+      }
+    });
   };
 
   const options = {
@@ -37,7 +64,11 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
         >
           <StyledSearch>
             <IconSearch className='icon' />
-            <input placeholder='輸入地址或地標...' />
+            <input
+              onChange={onSearchInputChange}
+              onKeyPress={onSearchInputKeydown}
+              placeholder='輸入地址或地標...'
+            />
           </StyledSearch>
         </Autocomplete>
       ) : (
