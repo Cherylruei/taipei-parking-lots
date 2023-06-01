@@ -2,6 +2,7 @@ import { IconSearch } from 'assets/icons';
 import { StyledSearch } from 'styles/Navbar.styled';
 import { Autocomplete } from '@react-google-maps/api';
 import { useState, useRef } from 'react';
+import debounce from 'lodash.debounce';
 
 const SearchInput = ({ map, setCoords, isLoaded }) => {
   const [searchInput, setSearchInput] = useState('');
@@ -13,7 +14,6 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
 
   const onPlaceChanged = () => {
     if (autoCompleteRef.current !== null) {
-      console.log({ autoCompleteRef });
       const place = autoCompleteRef?.current.getPlace();
       if (place && place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
@@ -26,8 +26,10 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
   };
 
   const onSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
+    setSearchInput(e?.target?.value);
   };
+
+  const debounceOnChange = debounce(onSearchInputChange, 500);
 
   const onSearchInputKeydown = (e) => {
     if (e.key === 'Enter') {
@@ -65,7 +67,7 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
           <StyledSearch>
             <IconSearch className='icon' />
             <input
-              onChange={onSearchInputChange}
+              onChange={debounceOnChange}
               onKeyPress={onSearchInputKeydown}
               placeholder='輸入地址或地標...'
             />
