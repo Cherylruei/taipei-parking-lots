@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { GlobalStyle } from 'components/globalStyle';
 import { GlobalContainer } from 'styles/Container.styled';
 import { MapWrapper, NavbarWrapper } from 'styles/Container.styled';
-import { getAvailableLots, getPlacesData } from 'api';
+import { getAvailableLots, getLotsData } from 'api';
 import { useJsApiLoader } from '@react-google-maps/api';
 
 const libraries = ['places'];
@@ -26,7 +26,6 @@ function App() {
 
   const mapRef = useRef();
 
-  // 使用者座標資料
   const [coords, setCoords] = useState(defaultCenter);
   // 拿到的所有停車場資料
   const [parkingLots, setParkingLots] = useState([]);
@@ -49,7 +48,7 @@ function App() {
   // 之後再解決 useEffect
   const getParkingLots = async (location) => {
     try {
-      const lotsInfo = await getPlacesData(location);
+      const lotsInfo = await getLotsData(location);
       const availableLots = await getAvailableLots(location);
       if (lotsInfo && availableLots) {
         // const updatedTime = data.UPDATETIME;
@@ -67,13 +66,12 @@ function App() {
       console.log(error);
     }
   };
-  console.log({ isLoading });
 
   useEffect(() => {
     setIsLoading(true);
     getParkingLots();
   }, []);
-  console.log({ parkingLots });
+
   return (
     <GlobalContainer>
       <GlobalStyle />
@@ -82,7 +80,6 @@ function App() {
           isLoaded={isLoaded}
           mapRef={mapRef}
           map={map}
-          setCoords={setCoords}
           visibleLots={visibleLots}
           selected={selected}
           setSelected={setSelected}
@@ -96,9 +93,9 @@ function App() {
           mapRef={mapRef}
           map={map}
           setMap={setMap}
-          setCoords={setCoords}
           selected={selected}
           setSelected={setSelected}
+          // setup map default center
           coords={coords}
           parkingLots={parkingLots}
           visibleLots={visibleLots}

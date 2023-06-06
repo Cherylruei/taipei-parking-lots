@@ -6,7 +6,7 @@ const lotsDescURL =
 const lotsAvailableURL =
   'https://tcgbusfs.blob.core.windows.net/blobtcmsv/TCMSV_allavailable.json';
 
-export const getPlacesData = async () => {
+export const getLotsData = async () => {
   try {
     const res = await axios.get(lotsDescURL);
     return res.data.data;
