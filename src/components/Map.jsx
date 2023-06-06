@@ -19,7 +19,7 @@ function transferLatLng(x, y) {
 const LocationBtn = ({ handleUserLocation }) => {
   return (
     <StyledLocation
-      style={{ position: 'absolute', bottom: '11.625em', right: '0.625em' }}
+      style={{ position: 'absolute', bottom: '9.625em', right: '0.5em' }}
     >
       <IconLocation onClick={handleUserLocation} />
     </StyledLocation>
@@ -37,7 +37,6 @@ const Map = ({
   map,
   mapRef,
   setMap,
-  setCoords,
   selected,
   setSelected,
   coords,
@@ -46,7 +45,8 @@ const Map = ({
   setVisibleLots,
   availablePlaces,
 }) => {
-  const [currentPosition, setCurrentPosition] = useState(coords);
+  // 設置使用者現在的位置
+  const [currentPosition, setCurrentPosition] = useState(null);
   const [showPosition, setShowPosition] = useState(false);
   // map 是 google maps 的物件，設置 state的變數去追蹤他的變化
   // 當地圖停止拖曳時為 true
@@ -67,14 +67,15 @@ const Map = ({
   const handleLoad = useCallback((map) => {
     mapRef.current = map;
     setMap(map);
-    onLoad(map);
     map.setZoom(16);
     map.setCenter(coords);
+    onLoad(map);
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (map) {
+      // 監聽地圖是否拖曳停止
       const listener = map.addListener('idle', () => {
         setIsMapIdle(true);
       });
@@ -84,9 +85,9 @@ const Map = ({
     }
   }, [map]);
 
-  console.log({ selected });
   useEffect(() => {
     if (isMapIdle) {
+      // 如果地圖拖曳停止，則顯示以下資料
       const bounds = map.getBounds();
       const visibleLots = parkingLots?.filter((parkingLot) => {
         const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
@@ -153,18 +154,18 @@ const Map = ({
   }, [map, isMapIdle, visibleLots, setVisibleLots, parkingLots]);
 
   const handleUserLocation = () => {
+    const map = mapRef.current;
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userPosition = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        setCoords(userPosition);
+        map?.setCenter(userPosition);
         setCurrentPosition(userPosition);
         setShowPosition(true);
 
         const radius = 0.001; // 使用者使用定位中心上下左右個擴展 0.001 (經緯度) 經度約280公尺
-        const map = mapRef.current;
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
         const northEast = new window.google.maps.LatLng(
@@ -221,7 +222,9 @@ const Map = ({
           )}
           <LocationBtn handleUserLocation={handleUserLocation} />
           {!parkingLots.length > 0 && (
-            <StyledLoading>停車場資料加載中...</StyledLoading>
+            <StyledLoading>
+              <div className='loading'></div>
+            </StyledLoading>
           )}
         </GoogleMap>
       ) : (

@@ -4,7 +4,8 @@ export const StyledSearch = styled.div`
   display: flex;
   align-items: center;
   max-width: 100%;
-  height: 3em;
+  height: 2em;
+  width: 15.5em;
   margin: 10px 5px;
   background-color: var(--color-white);
   border: none;

@@ -150,7 +150,7 @@ html,body {
   font-family: 'Noto Sans TC', sans-serif;
   font-weight: 300;
   font-style: normal;
-  background: #ebf2f8
+  background: var(--color-grey)
 }
 
 `;
