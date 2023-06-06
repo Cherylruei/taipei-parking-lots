@@ -38,14 +38,13 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
     }
     // eslint-disable-next-line
   }, [selected]);
-  console.log({ visibleLots });
+
   return (
     <StyledList>
       {visibleLots?.map((parkingLot, i) => {
         const availablePlace = availablePlaces?.find(
           (place) => place.id === parkingLot.id
         );
-        console.log({ availablePlace });
         const refProp = elRefs[i];
         return (
           <div key={parkingLot.id} ref={refProp}>
@@ -85,7 +84,6 @@ const Navbar = ({
       <SearchInput
         isLoaded={isLoaded}
         map={map}
-        setCoords={setCoords}
         selected={selected}
         setSelected={setSelected}
         onPlaceChanged={onPlaceChanged}

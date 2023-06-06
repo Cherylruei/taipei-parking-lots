@@ -2,15 +2,29 @@ import { IconSearch } from 'assets/icons';
 import { StyledSearch } from 'styles/Navbar.styled';
 import { Autocomplete } from '@react-google-maps/api';
 import { useState, useRef } from 'react';
-import debounce from 'lodash.debounce';
 
-const SearchInput = ({ map, setCoords, isLoaded }) => {
+const SearchInput = ({ map, isLoaded }) => {
   const [searchInput, setSearchInput] = useState('');
   const autoCompleteRef = useRef(null);
 
+  // this callback is called when the autoComplete instance has loaded, it is called with the autoComplete instance.
   const handleLoad = (autoComplete) => {
     autoCompleteRef.current = autoComplete;
   };
+
+  function codeAdress() {
+    if (searchInput.trim() !== '') {
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ address: searchInput }, function (results, status) {
+        if (status == 'OK') {
+          map?.setCenter(results[0].geometry.location);
+        } else {
+          //Geocode was not successful for the following reason: INVALID_REQUEST 自動出現代表 status 依然OK，但要確認這是從哪出現的
+          console.log('Geocode ' + status);
+        }
+      });
+    }
+  }
 
   const onPlaceChanged = () => {
     if (autoCompleteRef.current !== null) {
@@ -18,38 +32,26 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
       if (place && place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
-        setSearchInput(place.formatted_address);
-        setCoords({ lat, lng });
-        map?.setCenter({ lat, lng });
-      }
-    }
-  };
-
-  const onSearchInputChange = (e) => {
-    setSearchInput(e?.target?.value);
-  };
-
-  const debounceOnChange = debounce(onSearchInputChange, 500);
-
-  const onSearchInputKeydown = (e) => {
-    if (e.key === 'Enter') {
-      geocodeAddress(searchInput);
-    }
-  };
-
-  const geocodeAddress = (address) => {
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address }, (result, status) => {
-      if (status === 'OK') {
-        const lat = result[0].geometry.location.lat();
-        const lng = result[0].geometry.location.lng();
+        // user choose one of autoComplete places options and setup the place name keyword in searchInput bar
+        setSearchInput(place.name);
+        // setCoords({ lat, lng });
         map?.setCenter({ lat, lng });
       } else {
-        console.log(
-          `Geocode was not successful for the following reason ${status}`
-        );
+        // if the user want to search the input keyword only instead of autoComplete
+        codeAdress();
       }
-    });
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e?.target.value;
+    setSearchInput(value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      onPlaceChanged();
+    }
   };
 
   const options = {
@@ -67,8 +69,9 @@ const SearchInput = ({ map, setCoords, isLoaded }) => {
           <StyledSearch>
             <IconSearch className='icon' />
             <input
-              onChange={debounceOnChange}
-              onKeyPress={onSearchInputKeydown}
+              value={searchInput}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
               placeholder='輸入地址或地標...'
             />
           </StyledSearch>
