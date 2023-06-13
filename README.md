@@ -31,7 +31,7 @@ List on the left side only shows in desktop version.
 - @react-google-maps/api @2.18.1
 - @googlemaps/markerclusterer @2.0.15
 - react @18.2.0
-- react-dme @18.2.0
+- react-dom @18.2.0
 - styled-components @5.3.9
 - twd97-to-latlng @1.0.0
 
