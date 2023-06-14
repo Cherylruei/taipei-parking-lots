@@ -37,13 +37,14 @@ const Map = ({
   map,
   mapRef,
   setMap,
-  selected,
   setSelected,
   coords,
   parkingLots,
   visibleLots,
   setVisibleLots,
   availablePlaces,
+  currentInfoWindow,
+  setCurrentInfoWindow,
 }) => {
   // 設置使用者現在的位置
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -53,7 +54,6 @@ const Map = ({
   const [isMapIdle, setIsMapIdle] = useState(false);
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
-  const [currentInfoWindow, setCurrentInfoWindow] = useState(null);
 
   const options = useMemo(
     () => ({
@@ -73,6 +73,53 @@ const Map = ({
     // eslint-disable-next-line
   }, []);
 
+  // createMarkers function 按帶入的 visibleLots 不同而出現不同的 markers
+  const createMarkers = (visibleLots) => {
+    const markers = visibleLots?.map((parkingLot) => {
+      const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
+      const selectedMarker = parkingLot;
+      const marker = new window.google.maps.Marker({
+        key: parkingLot.id,
+        position: { lat, lng },
+        icon: {
+          url: parking,
+          scaledSize: new window.google.maps.Size(40, 40),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(15, 15),
+          zIndex: 1,
+        },
+      });
+      const infoWindow = new window.google.maps.InfoWindow();
+      marker.addListener('click', () => {
+        // eslint-disable-next-line
+        const selectedLot = availablePlaces?.find((place) => {
+          if (place.id === selectedMarker.id) return place;
+        });
+        infoWindow.setContent(`
+              <div>
+                <h2>${selectedMarker.name}</h2>
+                <p>
+                  總停車位: <b>${selectedMarker.totalcar}</b>
+                </p>
+                <p>
+                  剩餘空位: <b>${
+                    selectedLot.availablecar >= 0
+                      ? selectedLot.availablecar
+                      : '空位目前尚無法取得'
+                  }</b>
+                </p>
+              </div>
+          `);
+        infoWindow.open(map, marker);
+        setCurrentInfoWindow(infoWindow);
+        // 之後用來使用顯示 selected 的資訊視窗
+        setSelected(selectedMarker);
+      });
+      return marker;
+    });
+    return markers;
+  };
+
   useEffect(() => {
     if (map) {
       // 監聽地圖是否拖曳停止
@@ -89,58 +136,14 @@ const Map = ({
     if (isMapIdle) {
       // 如果地圖拖曳停止，則顯示以下資料
       const bounds = map.getBounds();
+      console.log('isMapIdle', isMapIdle);
+      console.log('bounds', bounds);
       const visibleLots = parkingLots?.filter((parkingLot) => {
         const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
         return bounds.contains(new window.google.maps.LatLng(lat, lng));
       });
-      const markers = visibleLots?.map((parkingLot) => {
-        const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
-        const selectedMarker = parkingLot;
-        const marker = new window.google.maps.Marker({
-          key: parkingLot.id,
-          position: { lat, lng },
-          icon: {
-            url: parking,
-            scaledSize: new window.google.maps.Size(40, 40),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(15, 15),
-            zIndex: 1,
-          },
-        });
-        const infoWindow = new window.google.maps.InfoWindow();
-        marker.addListener('click', () => {
-          // eslint-disable-next-line
-          const lot = availablePlaces?.find((place) => {
-            if (place.id === selectedMarker.id) return place;
-          });
-          setSelected(lot);
-          if (currentInfoWindow) {
-            currentInfoWindow.close();
-            setCurrentInfoWindow(null);
-          }
-          infoWindow.setContent(`
-              <div>
-                <h2>${selectedMarker.name}</h2>
-                <p>
-                  總停車位: <b>${selectedMarker.totalcar}</b>
-                </p>
-                <p>
-                  剩餘空位: <b>${
-                    lot.availablecar >= 0
-                      ? lot.availablecar
-                      : '空位目前尚無法取得'
-                  }</b>
-                </p>
-              </div>
-          `);
-          infoWindow.open(map, marker);
-          setCurrentInfoWindow(infoWindow);
-          // 之後用來使用顯示 selected 的資訊視窗
-          setSelected(selectedMarker);
-        });
-        return marker;
-      });
-
+      console.log({ visibleLots });
+      const markers = createMarkers(visibleLots);
       new MarkerClusterer({
         map,
         markers,
@@ -151,7 +154,23 @@ const Map = ({
       setIsMapIdle(false);
     }
     // eslint-disable-next-line
-  }, [map, isMapIdle, visibleLots, setVisibleLots, parkingLots]);
+  }, [isMapIdle]);
+
+  useEffect(() => {
+    if (map) {
+      const clickListener = map.addListener('click', () => {
+        if (currentInfoWindow) {
+          currentInfoWindow.close();
+          setCurrentInfoWindow(null);
+          setSelected(null);
+        }
+      });
+      return () => {
+        window.google.maps.event.removeListener(clickListener);
+      };
+    }
+    // eslint-disable-next-line
+  }, [map, currentInfoWindow]);
 
   const handleUserLocation = () => {
     const map = mapRef.current;
