@@ -34,6 +34,7 @@ export const StyledSearch = styled.div`
 
 export const StyledList = styled.ul`
   overflow-y: scroll;
+  display: none;
   ::-webkit-scrollbar {
     display: none;
   }
