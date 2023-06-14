@@ -5,7 +5,7 @@ export const StyledSearch = styled.div`
   align-items: center;
   max-width: 100%;
   height: 2em;
-  width: 15.5em;
+  width: 14rem;
   margin: 10px 5px;
   background-color: var(--color-white);
   border: none;
@@ -16,7 +16,7 @@ export const StyledSearch = styled.div`
   input {
     flex-grow: 1;
     border: none;
-    max-width: 100%;
+    max-width: 50%;
     height: 2em;
     font-size: var(--fs-basic);
     background: var(--color-white);
@@ -27,14 +27,16 @@ export const StyledSearch = styled.div`
 
   @media screen and (max-width: 1023px) {
     input {
-      max-width: 723px;
+      max-width: 10rem;
     }
   }
 `;
 
 export const StyledList = styled.ul`
   overflow-y: scroll;
-  display: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   div {
     margin: 1rem 1rem;
     padding: 0.5rem 1.5rem;

@@ -20,7 +20,7 @@ export const GlobalContainer = styled.div`
   grid-template-rows: 1fr 9fr;
 
   @media screen and (${device.lg}) {
-    grid-template-columns: 2.5fr 5.5fr;
+    grid-template-columns: 1.5fr 8fr;
   }
 `;
 
@@ -35,7 +35,7 @@ export const NavbarWrapper = styled.div`
   max-width: 100%;
   max-height: 30vh;
   margin: 0px;
-  z-index: 1000;
+  z-index: 10;
 
   @media screen and (${device.lg}) {
     position: static;

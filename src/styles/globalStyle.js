@@ -142,6 +142,7 @@ table {
   --color-grey: #f0f0f0;
   --color-white-grey: #f9f9f9;
   --color-white: #ffffff;
+  --color-sb:#d7e6f0;
 }
 
 html,body {

@@ -1,11 +1,12 @@
 import Map from 'components/Map';
 import Navbar from 'components/Navbar';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { GlobalStyle } from 'components/globalStyle';
+import { GlobalStyle } from 'styles/globalStyle';
 import { GlobalContainer } from 'styles/Container.styled';
 import { MapWrapper, NavbarWrapper } from 'styles/Container.styled';
 import { getAvailableLots, getLotsData } from 'api';
 import { useJsApiLoader } from '@react-google-maps/api';
+import Slide from 'components/Slide';
 
 const libraries = ['places'];
 
@@ -38,6 +39,7 @@ function App() {
   //eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
   const [map, setMap] = useState(null);
+  const [currentInfoWindow, setCurrentInfoWindow] = useState(null);
 
   // 用 useRef 和 useCallback 去儲存 GoogleMap的實例
   const onLoad = useCallback((map) => {
@@ -71,7 +73,7 @@ function App() {
     setIsLoading(true);
     getParkingLots();
   }, []);
-
+  console.log('selected', selected);
   return (
     <GlobalContainer>
       <GlobalStyle />
@@ -86,6 +88,16 @@ function App() {
           availablePlaces={availablePlaces}
         />
       </NavbarWrapper>
+      {selected ? (
+        <Slide
+          selectedLot={selected}
+          setSelected={setSelected}
+          currentInfoWindow={currentInfoWindow}
+          setCurrentInfoWindow={setCurrentInfoWindow}
+        />
+      ) : (
+        ''
+      )}
       <MapWrapper>
         <Map
           isLoaded={isLoaded}
@@ -101,6 +113,8 @@ function App() {
           visibleLots={visibleLots}
           setVisibleLots={setVisibleLots}
           availablePlaces={availablePlaces}
+          currentInfoWindow={currentInfoWindow}
+          setCurrentInfoWindow={setCurrentInfoWindow}
         />
       </MapWrapper>
     </GlobalContainer>
