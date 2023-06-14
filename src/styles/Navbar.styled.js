@@ -36,8 +36,8 @@ export const StyledList = styled.ul`
   overflow-y: scroll;
   display: none;
   div {
-    margin: 16px 16px;
-    padding: 5px 16px;
+    margin: 1rem 1rem;
+    padding: 0.5rem 1.5rem;
     line-height: 1.5rem;
     background: var(--color-secondary);
     border: 2px solid var(--color-white-grey);
@@ -46,6 +46,10 @@ export const StyledList = styled.ul`
     box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 5px;
     h2 {
       font-weight: 500;
+    }
+
+    p {
+      font-size: 0.8rem;
     }
   }
   @media screen and (min-width: 1024px) {

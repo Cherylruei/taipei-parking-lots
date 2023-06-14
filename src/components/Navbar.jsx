@@ -49,10 +49,10 @@ const List = ({ visibleLots, availablePlaces, selected, mapRef }) => {
         return (
           <div key={parkingLot.id} ref={refProp}>
             <h2>{parkingLot.name}</h2>
-            <p>地址:{parkingLot.address}</p>
-            <p>總停車位:{parkingLot.totalcar}</p>
+            <p>地址: {parkingLot.address}</p>
+            <p>總停車位: {parkingLot.totalcar}</p>
             <p>
-              剩餘空位:
+              剩餘空位:{' '}
               {availablePlace.availablecar >= 0
                 ? availablePlace.availablecar
                 : '空位目前尚無法取得'}
@@ -84,8 +84,6 @@ const Navbar = ({
       <SearchInput
         isLoaded={isLoaded}
         map={map}
-        selected={selected}
-        setSelected={setSelected}
         onPlaceChanged={onPlaceChanged}
         onLoadAuto={onLoadAuto}
         autoComplete={autoComplete}
