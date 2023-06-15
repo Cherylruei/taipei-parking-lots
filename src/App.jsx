@@ -26,7 +26,7 @@ function App() {
   );
 
   const mapRef = useRef();
-
+  // eslint-disable-next-line
   const [coords, setCoords] = useState(defaultCenter);
   // 拿到的所有停車場資料
   const [parkingLots, setParkingLots] = useState([]);
@@ -39,7 +39,6 @@ function App() {
   //eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
   const [map, setMap] = useState(null);
-  const [currentInfoWindow, setCurrentInfoWindow] = useState(null);
 
   // 用 useRef 和 useCallback 去儲存 GoogleMap的實例
   const onLoad = useCallback((map) => {
