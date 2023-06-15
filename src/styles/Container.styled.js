@@ -49,9 +49,28 @@ export const NavbarWrapper = styled.div`
 export const MapWrapper = styled.div`
   max-height: 100vh;
 
+  .infoWindow {
+    background: #f0f6fa;
+    border: 5px solid #f0f6fa;
+    border-radius: 5%;
+    box-shadow: 0 0 15px 10px #fff;
+  }
   .gm-style {
     font: 700 12px Noto Sans TC, Arial, sans-serif;
     color: var(--color-theme);
+  }
+  .lotsNumber {
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+  }
+  .gm-style-iw-d {
+    h2 {
+      font-weight: 600;
+    }
+    .number {
+      font-weight: 600;
+    }
   }
 
   @media screen and (${device.lg}) {

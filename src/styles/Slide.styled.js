@@ -45,15 +45,23 @@ export const Modal = styled.div`
       font-size: 1rem;
     }
   }
+  .otherInfo {
+    text-align: left;
+    padding: 1rem 3rem 0rem;
+    .icon {
+      width: 0.8rem;
+      height: 0.8rem;
+      padding-right: 0.5rem;
+    }
+    .address {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .text {
+      font-size: 0.8rem;
+    }
+  }
 
-  .address {
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 1rem;
-  }
-  .text {
-    font-size: 0.8rem;
-  }
   .payment {
     padding: 0.2rem 0.5rem 0rem;
     font-size: 0.7rem;

@@ -95,18 +95,20 @@ const Map = ({
           if (place.id === selectedMarker.id) return place;
         });
         infoWindow.setContent(`
-              <div>
+              <div class="infoWindow">
                 <h2>${selectedMarker.name}</h2>
-                <p>
-                  總停車位: <b>${selectedMarker.totalcar}</b>
-                </p>
-                <p>
-                  剩餘空位: <b>${
+                <div class="lotsNumber">
+                 <p>  總停車位: </p>
+                  <p class="number"> ${selectedMarker.totalcar}</p>
+                </div>
+                <div class="lotsNumber">
+                 <p> 剩餘空位: </p> 
+                  <p class="number"> ${
                     selectedLot.availablecar >= 0
                       ? selectedLot.availablecar
                       : '空位目前尚無法取得'
-                  }</b>
-                </p>
+                  }</p>
+                 </div> 
               </div>
           `);
         infoWindow.open(map, marker);
