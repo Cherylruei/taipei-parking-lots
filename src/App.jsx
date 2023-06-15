@@ -88,16 +88,7 @@ function App() {
           availablePlaces={availablePlaces}
         />
       </NavbarWrapper>
-      {selected ? (
-        <Slide
-          selectedLot={selected}
-          setSelected={setSelected}
-          currentInfoWindow={currentInfoWindow}
-          setCurrentInfoWindow={setCurrentInfoWindow}
-        />
-      ) : (
-        ''
-      )}
+      {selected ? <Slide selectedLot={selected} /> : ''}
       <MapWrapper>
         <Map
           isLoaded={isLoaded}
@@ -113,8 +104,6 @@ function App() {
           visibleLots={visibleLots}
           setVisibleLots={setVisibleLots}
           availablePlaces={availablePlaces}
-          currentInfoWindow={currentInfoWindow}
-          setCurrentInfoWindow={setCurrentInfoWindow}
         />
       </MapWrapper>
     </GlobalContainer>

@@ -43,8 +43,6 @@ const Map = ({
   visibleLots,
   setVisibleLots,
   availablePlaces,
-  currentInfoWindow,
-  setCurrentInfoWindow,
 }) => {
   // 設置使用者現在的位置
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -52,6 +50,7 @@ const Map = ({
   // map 是 google maps 的物件，設置 state的變數去追蹤他的變化
   // 當地圖停止拖曳時為 true
   const [isMapIdle, setIsMapIdle] = useState(false);
+  const [currentInfoWindow, setCurrentInfoWindow] = useState(null);
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(false);
 
@@ -136,13 +135,10 @@ const Map = ({
     if (isMapIdle) {
       // 如果地圖拖曳停止，則顯示以下資料
       const bounds = map.getBounds();
-      console.log('isMapIdle', isMapIdle);
-      console.log('bounds', bounds);
       const visibleLots = parkingLots?.filter((parkingLot) => {
         const { lat, lng } = transferLatLng(parkingLot.tw97x, parkingLot.tw97y);
         return bounds.contains(new window.google.maps.LatLng(lat, lng));
       });
-      console.log({ visibleLots });
       const markers = createMarkers(visibleLots);
       new MarkerClusterer({
         map,
